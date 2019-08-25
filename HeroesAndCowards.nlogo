@@ -1,10 +1,55 @@
+globals [ sample-player ]
+turtles-own [ friend enemy ]
 
+to setup
+  clear-all
+  ask patches [ set pcolor white ]
+  create-turtles number [
+    setxy random-xcor random-ycor
+
+    if ( personalities = "heroes" ) [ set color blue ]
+    if ( personalities = "cowards" ) [ set color red ]
+    if ( personalities = "mixed" ) [ set color one-of [ red blue ] ]
+
+    set friend one-of other turtles
+    set enemy one-of other turtles
+  ]
+  set sample-player one-of turtles
+  show sample-player
+  ask sample-player [
+  create-link-with friend [ set color green ]
+  create-link-with enemy [ set color red ]
+  ]
+  reset-ticks
+end
+
+
+
+to go
+  ask turtles [
+    if ( color = blue ) [ act-bravely ]
+    if ( color = red ) [ act-cowardly ]
+  ]
+  tick
+end
+
+to act-bravely
+  facexy ([xcor] of friend + [xcor] of enemy) / 2
+         ([ycor] of friend + [ycor] of enemy) / 2
+  fd 0.1
+end
+
+to act-cowardly
+  facexy [xcor] of friend + ([xcor] of friend - [xcor] of enemy) / 2
+         [ycor] of friend + ([ycor] of friend - [ycor] of enemy) / 2
+  fd 0.1
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
-210
-10
-647
-448
+559
+24
+996
+462
 -1
 -1
 13.0
@@ -14,18 +59,77 @@ GRAPHICS-WINDOW
 1
 1
 0
-1
-1
+0
+0
 1
 -16
 16
 -16
 16
-0
-0
+1
+1
 1
 ticks
 30.0
+
+BUTTON
+59
+60
+132
+93
+NIL
+setup\n
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+59
+105
+122
+138
+NIL
+go
+T
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+SLIDER
+296
+55
+468
+88
+number
+number
+0
+100
+20.0
+1
+1
+NIL
+HORIZONTAL
+
+CHOOSER
+295
+113
+433
+158
+personalities
+personalities
+"heroes" "cowards" "mixed"
+2
 
 @#$#@#$#@
 ## WHAT IS IT?
